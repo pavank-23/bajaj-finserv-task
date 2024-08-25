@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Bajaj Finserv Full Stack Task
+
+This project is a full-stack Next.js application developed for the Bajaj Finserv Full Stack Task. It processes input data and provides filtered results based on user selection.
+
+## Features
+
+- REST API endpoint that handles both GET and POST requests
+- Frontend interface for submitting JSON data and viewing filtered results
+- TypeScript implementation for improved type safety and developer experience
+- Utilizes Next.js App Router for efficient routing and API handling
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) - React framework for both frontend and API routes
+- [TypeScript](https://www.typescriptlang.org/) - Typed superset of JavaScript
+- [React](https://reactjs.org/) - JavaScript library for building user interfaces
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
+- Node.js (v14 or later)
+- npm (v6 or later)
+
+### Installation
+
+1. Clone the repository
+```sh
+git clone https://github.com/pavank-23/bajaj-finserv-task.git
+cd bajaj-finserv task
+```
+2. Install dependencies
+```sh
+npm install
+```
+3. Running the app
+
+For development:
+```sh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For production:
+```sh
+npm run build
+npm start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. The application will be available at `http://localhost:3000`.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## API Endpoints
 
-## Learn More
+### POST /api/bfhl
 
-To learn more about Next.js, take a look at the following resources:
+Processes the input data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Request body:
+```json
+{
+"data": ["M","1","334","4","B","Z","a"]
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Reponse:
+```json
+{
+  "is_success": true,
+  "user_id": "john_doe_17091999",
+  "email": "john@xyz.com",
+  "roll_number": "ABCD123",
+  "numbers": ["1","334","4"],
+  "alphabets": ["M","B","Z","a"],
+  "highest_lowercase_alphabet": ["a"]
+}
+```
 
-## Deploy on Vercel
+### GET /api/bfhl
+Returns the operation code.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Response:
+```json
+{
+  "operation_code": 1
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Project Structure
+
+- app/: Contains the main application code
+- api/: API routes
+- page.tsx: Main page component
+- layout.tsx: Root layout component
+- components/: Reusable React components
+- types/: TypeScript type definitions
