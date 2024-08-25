@@ -5,7 +5,7 @@ export interface BFHLResponse {
     roll_number: string;
     numbers: string[];
     alphabets: string[];
-    highest_lowercase_alphabet: string[];
+    highest_lowercase_alphabet: string;
   }
   
   export interface BFHLRequest {

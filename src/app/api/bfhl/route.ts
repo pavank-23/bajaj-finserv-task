@@ -3,22 +3,20 @@ import { BFHLResponse, BFHLRequest } from '../../types';
 
 export async function POST(req: NextRequest) {
   const { data }: BFHLRequest = await req.json();
-
-  const numbers = data.filter(item => !isNaN(Number(item)));
-  const alphabets = data.filter(item => isNaN(Number(item)));
-  const highestLowercaseAlphabet = alphabets
-    .filter(ch => ch === ch.toLowerCase())
-    .sort()
-    .pop() || null;
+  const numbers = data.filter((item: string) => !isNaN(Number(item)));
+  const alphabets = data.filter((item: string) => (item.toUpperCase() != item.toLowerCase()))
+  let lowercase_alphabet = data.filter((item: string) => item.match(/[a-z]/));
+  lowercase_alphabet.sort();
+  const highest_lowercase_alphabet = lowercase_alphabet[lowercase_alphabet.length - 1] != undefined ? lowercase_alphabet[-1] : '[]';
 
   const response: BFHLResponse = {
     is_success: true,
-    user_id: "john_doe_17091999",
-    email: "john@xyz.com",
-    roll_number: "ABCD123",
+    user_id: "pavan_k_23102003",
+    email: "23pavank@gmail.com",
+    roll_number: "21BDS0198",
     numbers,
     alphabets,
-    highest_lowercase_alphabet: highestLowercaseAlphabet ? [highestLowercaseAlphabet] : []
+    highest_lowercase_alphabet
   };
 
   return NextResponse.json(response);

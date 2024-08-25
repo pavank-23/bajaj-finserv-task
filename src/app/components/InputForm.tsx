@@ -10,29 +10,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { BFHLResponse, BFHLRequest } from '../types';
 
 export default function Component() {
   const [apiInput, setApiInput] = useState('{"data":["M","1","334","4","B"]}')
   const [filter, setFilter] = useState('Numbers')
-  const [filteredResponse, setFilteredResponse] = useState('')
+  const [filteredResponse, setFilteredResponse] = useState('')  
+  const [responseData, setResponseData] = useState<BFHLResponse | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(['alphabets', 'numbers', 'highest_lowercase_alphabet']);
+    let data : BFHLResponse;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      const data = JSON.parse(apiInput).data
+        const res = await fetch('/api/bfhl', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: apiInput,
+        });
+        data = await res.json();
+        setResponseData(data);
+    } catch (error) {
+    console.error('Error:', error);
+    }
+    try {
       if (filter === 'Numbers') {
-        const numbers = data.filter((item: string) => !isNaN(Number(item)))
-        setFilteredResponse(`Numbers: ${numbers.join(',')}`)
+          setFilteredResponse(`Numbers: ${responseData?.numbers.join(',')}`)
       } else if (filter === "Letters") {
-        const letters = data.filter((item: string) => (item.toUpperCase() != item.toLowerCase()))
-        setFilteredResponse(`Letters: ${letters.join(',')}`)
+        setFilteredResponse(`Letters: ${responseData?.alphabets.join(',')}`)
       } else {
-        let highest_lowercase_alphabet = data.filter((item: string) => item.match(/[a-z]/));
-        highest_lowercase_alphabet.sort();
-        if (highest_lowercase_alphabet[highest_lowercase_alphabet.length - 1] != undefined) {
-            setFilteredResponse(`Highest Lowercase Alphabet: ${highest_lowercase_alphabet[highest_lowercase_alphabet.length - 1]}`)
-        } else {
-            setFilteredResponse('Highest Lowercase Alphabet: []')
-        }
+        setFilteredResponse(`Highest Lowercase Alphabet: ${responseData?.highest_lowercase_alphabet}`)
       }
     } catch (error) {
       setFilteredResponse('Invalid JSON input')
