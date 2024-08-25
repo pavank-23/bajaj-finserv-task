@@ -1,55 +1,55 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { BFHLResponse, BFHLRequest } from '../types';
+} from "@/components/ui/select";
+import { BFHLResponse, BFHLRequest } from "../types";
 
 export default function Component() {
-  const [apiInput, setApiInput] = useState('{"data":["M","1","334","4","B"]}')
-  const [filter, setFilter] = useState('Numbers')
-  const [filteredResponse, setFilteredResponse] = useState('')  
-  const [responseData, setResponseData] = useState<BFHLResponse | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(['alphabets', 'numbers', 'highest_lowercase_alphabet']);
-    let data : BFHLResponse;
+  const [apiInput, setApiInput] = useState('{"data":["M","1","334","4","B"]}');
+  const [filter, setFilter] = useState("Numbers");
+  const [filteredResponse, setFilteredResponse] = useState("");
 
   const handleSubmit = async () => {
     try {
-        const res = await fetch('/api/bfhl', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: apiInput,
-        });
-        data = await res.json();
-        setResponseData(data);
-    } catch (error) {
-    console.error('Error:', error);
-    }
-    try {
-      if (filter === 'Numbers') {
-          setFilteredResponse(`Numbers: ${responseData?.numbers.join(',')}`)
-      } else if (filter === "Letters") {
-        setFilteredResponse(`Letters: ${responseData?.alphabets.join(',')}`)
-      } else {
-        setFilteredResponse(`Highest Lowercase Alphabet: ${responseData?.highest_lowercase_alphabet}`)
+      console.log(apiInput, filter);
+      const res = await fetch("/api/bfhl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: apiInput,
+      });
+      const data = await res.json();
+      if (data !== undefined) {
+        if (filter === "Numbers") {
+          setFilteredResponse(`Numbers: ${data.numbers.join(",")}`);
+        } else if (filter === "Letters") {
+          setFilteredResponse(`Letters: ${data.alphabets.join(",")}`);
+        } else {
+          setFilteredResponse(
+            `Highest Lowercase Alphabet: ${data.highest_lowercase_alphabet}`
+          );
+        }
       }
     } catch (error) {
-      setFilteredResponse('Invalid JSON input')
+      console.error("Error:", error);
     }
-  }
+  };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <div className="space-y-4">
         <div>
-          <label htmlFor="api-input" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="api-input"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             API Input
           </label>
           <Input
@@ -65,7 +65,10 @@ export default function Component() {
         </Button>
 
         <div>
-          <label htmlFor="multi-filter" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="multi-filter"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Multi Filter
           </label>
           <Select value={filter} onValueChange={setFilter}>
@@ -75,18 +78,18 @@ export default function Component() {
             <SelectContent>
               <SelectItem value="Numbers">Numbers</SelectItem>
               <SelectItem value="Letters">Letters</SelectItem>
-              <SelectItem value="Highest Lowercase Alphabet">Highest Lowercase Alphabet</SelectItem>
+              <SelectItem value="Highest Lowercase Alphabet">
+                Highest Lowercase Alphabet
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold mb-2">Filtered Response</h2>
-          <div className="p-3 bg-gray-100 rounded-md">
-            {filteredResponse}
-          </div>
+          <div className="p-3 bg-gray-100 rounded-md">{filteredResponse}</div>
         </div>
       </div>
     </div>
-  )
+  );
 }
